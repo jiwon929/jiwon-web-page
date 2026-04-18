@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>나혼렙 시스템</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  color: #00eaff;
+}
+
+.container {
+  width: 420px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px solid #00eaff;
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.stat {
+  margin: 8px 0;
+}
+
+.bar {
+  width: 100%;
+  height: 18px;
+  background: #111;
+  border: 1px solid #00eaff;
+}
+
+.bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #00eaff;
+}
+
+button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  background: black;
+  color: #00eaff;
+  border: 1px solid #00eaff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00eaff;
+  color: black;
+}
+
+.log {
+  margin-top: 10px;
+  font-size: 13px;
+  height: 80px;
+  overflow: auto;
+  border-top: 1px solid #00eaff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>SYSTEM</h1>
+
+  <div class="stat">Lv. <span id="level">1</span></div>
+
+  <div class="stat">
+    EXP
+    <div class="bar">
+      <div id="expBar" class="bar-fill"></div>
+    </div>
+  </div>
+
+  <div class="stat">힘: <span id="str">10</span></div>
+  <div class="stat">민첩력: <span id="agi">10</span></div>
+  <div class="stat">지능: <span id="int">10</span></div>
+
+  <button onclick="hunt()">사냥하기</button>
+  <button onclick="dailyQuest()">일일 퀘스트 받기</button>
+
+  <div class="log" id="log"></div>
+</div>
+
+<script>
+let level = 1;
+let exp = 0;
+let maxExp = 100;
+
+let str = 10;
+let agi = 10;
+let int = 10;
+
+const quests = ["팔굽혀펴기 100회","달리기 5km","윗몸일으키기 100회","던전 1회 클리어"];
+
+function updateUI() {
+  document.getElementById("level").innerText = level;
+  document.getElementById("str").innerText = str;
+  document.getElementById("agi").innerText = agi;
+  document.getElementById("int").innerText = int;
+
+  let percent = (exp / maxExp) * 100;
+  document.getElementById("expBar").style.width = percent + "%";
+}
+
+function hunt() {
+  let gained = Math.floor(Math.random() * 20) + 10;
+  exp += gained;
+  log(`사냥 성공 EXP +${gained}`);
+
+  if (exp >= maxExp) {
+    levelUp();
+  }
+
+  updateUI();
+}
+
+function levelUp() {
+  exp = 0;
+  level++;
+  str += 5;
+  agi += 5;
+  int += 5;
+
+  log(" 레벨 업!");
+}
+
+function dailyQuest() {
+  let quest = quests[Math.floor(Math.random() * quests.length)];
+  log(`일일 퀘스트: ${quest}`);
+}
+
+function log(message) {
+  let logbox = document.getElementById("log");
+  logbox.innerHTML += message + "<br>";
+  logbox.scrollTop = logbox.scrollHeight;
+}
+
+updateUI();
+</script>
+
+</body>
+</html>
